@@ -1,0 +1,89 @@
+# Cursor IDE Rules for JobKoAI Project
+
+## Project Overview
+This is a React-based mobile UI project for JobKoAI, focusing on creating a job search condition setting interface similar to Albamon.
+
+## Code Style & Standards
+
+### React Development
+- Always use functional components with hooks
+- Use TypeScript for better type safety
+- Follow React best practices and patterns
+- Use modern ES6+ syntax
+- Implement proper error handling
+
+### Component Structure
+- Keep components small and focused
+- Use proper prop validation
+- Implement proper state management
+- Follow single responsibility principle
+
+### Styling
+- Use CSS modules or styled-components
+- Implement responsive design for mobile-first approach
+- Follow BEM methodology for CSS class naming
+- Use CSS Grid and Flexbox for layouts
+
+### File Organization
+- Organize components in feature-based folders
+- Use index files for clean imports
+- Separate business logic from UI components
+- Keep utility functions in separate files
+
+## AI-Assisted Development Guidelines
+
+### Code Generation
+- Generate clean, readable, and maintainable code
+- Include proper comments and documentation
+- Follow established patterns in the codebase
+- Consider performance implications
+
+### Code Review
+- Review for security vulnerabilities
+- Check for accessibility compliance
+- Ensure mobile responsiveness
+- Validate against project requirements
+
+### Testing
+- Generate unit tests for components
+- Include integration tests for user flows
+- Test mobile interactions thoroughly
+- Ensure cross-browser compatibility
+
+## Project-Specific Requirements
+
+### Mobile UI/UX
+- Design for mobile-first experience
+- Implement touch-friendly interactions
+- Optimize for various screen sizes
+- Ensure fast loading times
+
+### Job Search Interface
+- Create intuitive search condition settings
+- Implement smooth form interactions
+- Provide clear visual feedback
+- Support multiple filter options
+
+### Data Handling
+- Properly handle JSON data structures
+- Implement error states for failed requests
+- Provide loading states for better UX
+- Validate user inputs
+
+## Performance Guidelines
+- Optimize bundle size
+- Implement lazy loading where appropriate
+- Use React.memo for expensive components
+- Minimize re-renders
+
+## Accessibility
+- Follow WCAG 2.1 guidelines
+- Implement proper ARIA labels
+- Ensure keyboard navigation
+- Provide alternative text for images
+
+## Security
+- Sanitize user inputs
+- Implement proper data validation
+- Avoid XSS vulnerabilities
+- Use secure coding practices 
