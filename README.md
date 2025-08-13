@@ -1,27 +1,42 @@
-# JOBKOREA AI CHALLENGE
+## 📦 사용 도구 명세
 
-## 🎯 과제 목표
+### Frontend Framework
+- **React**  
+  - 함수형 컴포넌트와 Hooks 기반 개발
+  - JSX를 활용한 선언적 UI 구성
+  - 상태 변화에 따른 효율적인 렌더링
 
-### 1. React 기반 프로젝트 환경 구축
-- React 18 기반 프로젝트 설정
-- 모던한 개발 환경 구성
+### Language
+- **TypeScript**  
+  - 정적 타입을 통한 코드 안정성 향상
+  - 인터페이스 및 타입 정의로 컴포넌트/상태 구조 명확화
 
-### 2. AI IDE 규칙(rule) 활성화 및 규칙 파일 작성
-- `.cursor/rules` - Cursor IDE 규칙 설정
-- `.claude/settings.json` - Claude AI 설정
-- `copilot-instructions.md` - GitHub Copilot 지시사항
+### State Management
+- **Zustand**  
+  - 가벼운 전역 상태 관리 라이브러리
+  - 필터 조건(근무지역, 업직종, 기간, 요일 등)의 상태 저장 및 초기화
+  - 보일러플레이트 코드 없이 간결하게 전역 상태 제어
 
-### 3. 생성형 AI를 활용한 알바몬 검색조건설정 모바일 페이지 UI 구현
-- 모바일 최적화된 UI/UX 설계
-- 하단 '지원하기' 클릭 시 JSON 데이터 활용
-- 반응형 디자인 적용
+### AI-assisted Development
+- **Cursor AI**  
+  - 프로젝트 규칙 파일(.rules)을 기반으로 AI 코딩 어시스턴트와 협업
+  - 컴포넌트 설계, 상태관리 로직 구현, UI 최적화 등에 AI 지원 활용
+  - AI 제안 코드 검토 후 직접 수정 및 최적화 반영
 
-### 4. 생성형 AI 도구 적극 활용
-- **분석**: AI를 활용한 요구사항 분석
-- **설계**: AI 기반 컴포넌트 설계
-- **코드 작성**: AI 도구를 활용한 코드 생성
-- **테스트**: AI 기반 테스트 케이스 작성
-- **프롬프트 설계**: 효과적인 AI 프롬프트 작성
-- **코드리뷰**: AI를 활용한 코드 품질 검토
+### Development Environment
+- **Node.js & npm**  
+  - 패키지 관리 및 빌드 환경 구성
+<!-- - **Vite** *(또는 CRA, 선택 시)*  
+  - 빠른 개발 서버와 빌드 속도 제공 -->
 
+### Styling
+- **CSS Modules** / **Styled-components** *(선택)*  
+  - 컴포넌트 단위 스타일링
+  - 모바일 퍼스트 디자인과 반응형 UI 구현
+- **Flexbox / CSS Grid**
+  - 모바일 UI 레이아웃 구성
 
+### Version Control
+- **Git & GitHub**
+  - 버전 관리 및 협업 기록 유지
+  - 커밋 메시지를 통한 AI/수동 작업 구분
