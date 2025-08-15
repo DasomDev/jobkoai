@@ -1,7 +1,7 @@
 const Header = () => {
   return (
-    <header className="App-header border-b">
-      <div className="flex items-center gap-2">
+    <header className="border-b App-header">
+      <div className="flex gap-2 items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
