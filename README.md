@@ -26,9 +26,7 @@
 ### Development Environment
 - **Node.js & npm**  
   - 패키지 관리 및 빌드 환경 구성
-<!-- - **Vite** *(또는 CRA, 선택 시)*  
-  - 빠른 개발 서버와 빌드 속도 제공 -->
-
+  
 ### Styling
 - **CSS Modules** / **Styled-components** *(선택)*  
   - 컴포넌트 단위 스타일링

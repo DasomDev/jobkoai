@@ -1,6 +1,6 @@
 const Header = () => {
   return (
-    <header className="border-b App-header">
+    <header className="flex justify-between h-[55px] px-3 border-b">
       <div className="flex gap-2 items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -8,8 +8,8 @@ const Header = () => {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          width="24"
-          height="24"
+          width="20"
+          height="20"
         >
           <path
             stroke-linecap="round"

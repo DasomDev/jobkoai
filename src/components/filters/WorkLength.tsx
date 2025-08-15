@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Counter from '../common/Counter';
 
 interface WorkPeriod {
   id: string;
@@ -34,22 +35,22 @@ const WorkLength: React.FC = () => {
   };
 
   return (
-    <div className="p-4 border-b border-gray-200">
+    <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무기간</h3>
-        <span className="text-sm text-red-500">{selectedPeriods.length}/{maxSelections}</span>
-      </div>
+        <Counter count={selectedPeriods.length} maxCount={maxSelections} />
+      </div>  
       
-      <div className="grid grid-cols-4 gap-2">
+      <div className="flex flex-wrap gap-2">
         {workPeriods.map((period) => (
           <button
             key={period.id}
             onClick={() => handlePeriodToggle(period.id)}
             disabled={!selectedPeriods.includes(period.id) && selectedPeriods.length >= maxSelections}
             className={`
-              p-3 rounded-lg text-sm font-medium transition-colors
+              py-[10px] px-[16px] flex items-center justify-center h-[34px]  rounded-full text-sm font-medium transition-colors
               ${selectedPeriods.includes(period.id)
-                ? 'bg-blue-500 text-white'
+                ? 'border border-[#ffddd2] bg-[#fff8f6] text-[var(--primary-color)]'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }
               ${!selectedPeriods.includes(period.id) && selectedPeriods.length >= maxSelections
