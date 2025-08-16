@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
+import RadioTypeButton from "../common/RadioTypeButton";
 
 interface TimeSlot {
   id: string;
   label: string;
 }
+
+type SelectionMode = "list" | "direct";
 
 const WorkTimes: React.FC = () => {
   const [selectionMode, setSelectionMode] = useState<"list" | "direct">("list");
@@ -46,33 +49,16 @@ const WorkTimes: React.FC = () => {
       </div>
 
       {/* Selection Mode Tabs */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setSelectionMode("list")}
-          className={`
-            flex-1 p-3 rounded-lg text-sm font-medium transition-colors
-              ${
-                selectionMode === "list"
-                  ? "border border-[var(--primary-color)] text-[var(--primary-color)] bg-white"
-                  : "border border-gray-300 text-gray-700 bg-gray-100"
-              }
-          `}
-        >
-          목록에서 선택
-        </button>
-        <button
-          onClick={() => setSelectionMode("direct")}
-          className={`
-            flex-1 p-3 rounded-lg text-sm font-medium transition-colors
-            ${
-              selectionMode === "direct"
-                ? "border border-[var(--primary-color)] text-[var(--primary-color)] bg-white"
-                : "border border-gray-300 text-gray-700 bg-gray-100"
-            }
-          `}
-        >
-          직접 선택
-        </button>
+      <div className="flex gap-2 mb-4 bg-[#F8F8F8] rounded-lg">
+        {["list", "direct"].map((mode) => (
+          <RadioTypeButton
+            key={mode}
+            id={mode}
+            label={mode === "list" ? "목록에서 선택" : "직접 선택"}
+            selected={selectionMode === mode}
+            onClick={() => setSelectionMode(mode as SelectionMode)}
+          />
+        ))}
       </div>
 
       {/* Time Slot Buttons */}

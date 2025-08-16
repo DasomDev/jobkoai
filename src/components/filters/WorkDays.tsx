@@ -2,24 +2,12 @@ import React, { useState } from "react";
 import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
 import condition from "../../data/condition.json";
+import RadioTypeButton from "../common/RadioTypeButton";
 
 interface WorkDayOption {
   id: string;
   label: string;
 }
-
-// const workDayOptions: WorkDayOption[] = [
-//   { id: "monToSun", label: "월~일" },
-//   { id: "monToSat", label: "월~토" },
-//   { id: "monToFri", label: "월~금" },
-//   { id: "weekend", label: "주말(토,일)" },
-//   { id: "6days", label: "주6일" },
-//   { id: "5days", label: "주5일" },
-//   { id: "4days", label: "주4일" },
-//   { id: "3days", label: "주3일" },
-//   { id: "2days", label: "주2일" },
-//   { id: "1day", label: "주1일" },
-// ];
 
 const workDayOptions: WorkDayOption[] = condition.workDays.collection.map(
   (item) => ({
@@ -74,33 +62,16 @@ const WorkDays: React.FC = () => {
       </div>
 
       {/* Selection Mode Buttons */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setSelectionMode("list")}
-          className={`
-            flex-1 p-3 rounded-lg text-sm font-medium transition-colors
-              ${
-                selectionMode === "list"
-                  ? "border border-[var(--primary-color)] text-[var(--primary-color)] bg-white"
-                  : "border border-gray-300 text-gray-700 bg-gray-100"
-              }
-          `}
-        >
-          목록에서 선택
-        </button>
-        <button
-          onClick={() => setSelectionMode("direct")}
-          className={`
-            flex-1 p-3 rounded-lg text-sm font-medium transition-colors
-            ${
-              selectionMode === "direct"
-                ? "border border-[var(--primary-color)] text-[var(--primary-color)] bg-white"
-                : "border border-gray-300 text-gray-700 bg-gray-100"
-            }
-          `}
-        >
-          직접 선택
-        </button>
+      <div className="flex gap-2 mb-4 bg-[#F8F8F8] rounded-lg">
+        {["list", "direct"].map((mode) => (
+          <RadioTypeButton
+            key={mode}
+            id={mode}
+            label={mode === "list" ? "목록에서 선택" : "직접 선택"}
+            selected={selectionMode === mode}
+            onClick={() => setSelectionMode(mode as SelectionMode)}
+          />
+        ))}
       </div>
 
       {/* Work Day Options */}
