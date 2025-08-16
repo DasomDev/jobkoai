@@ -1,72 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Counter from "../common/Counter";
 
 const KeywordFilter: React.FC = () => {
-  const [includeKeyword, setIncludeKeyword] = useState('');
-  const [excludeKeyword, setExcludeKeyword] = useState('');
+  const [includeKeyword, setIncludeKeyword] = useState("");
+  const [excludeKeyword, setExcludeKeyword] = useState("");
   const [excludedKeywords, setExcludedKeywords] = useState<string[]>([]);
-  
+
   const maxIncludeLength = 20;
   const maxExcludeLength = 100;
 
   const handleAddExclude = () => {
-    if (excludeKeyword.trim() && !excludedKeywords.includes(excludeKeyword.trim())) {
-      setExcludedKeywords(prev => [...prev, excludeKeyword.trim()]);
-      setExcludeKeyword('');
+    if (
+      excludeKeyword.trim() &&
+      !excludedKeywords.includes(excludeKeyword.trim())
+    ) {
+      setExcludedKeywords((prev) => [...prev, excludeKeyword.trim()]);
+      setExcludeKeyword("");
     }
   };
 
   const handleRemoveExclude = (keyword: string) => {
-    setExcludedKeywords(prev => prev.filter(k => k !== keyword));
+    setExcludedKeywords((prev) => prev.filter((k) => k !== keyword));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAddExclude();
     }
   };
 
   return (
-    <div className="p-4 border-b border-gray-200">
+    <div className="">
       <div className="mb-4">
         <h3 className="font-bold text-gray-900">키워드</h3>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-xs text-gray-600">
           여러 개의 키워드를 포함하거나 제외할 수 있습니다.
         </p>
       </div>
-      
+
       {/* Include Section */}
       <div className="mb-4">
-        <h4 className="mb-2 font-bold text-gray-900">포함</h4>
+        <div className="flex justify-between items-center mb-2">
+          <h4 className="font-bold text-gray-900">포함</h4>
+          <Counter count={includeKeyword.length} maxCount={maxIncludeLength} />
+        </div>
         <div className="relative">
           <input
             type="text"
             value={includeKeyword}
-            onChange={(e) => setIncludeKeyword(e.target.value.slice(0, maxIncludeLength))}
+            onChange={(e) =>
+              setIncludeKeyword(e.target.value.slice(0, maxIncludeLength))
+            }
             placeholder="입력 단어 포함 공고만 검색합니다."
-            className="p-3 pr-16 w-full rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+            className="p-3 pr-16 w-full rounded-lg border border-gray-300 focus:outline-none focus:border-black"
           />
-          <span className="absolute right-3 top-1/2 text-sm text-red-500 transform -translate-y-1/2">
-            {includeKeyword.length}/{maxIncludeLength}
-          </span>
         </div>
       </div>
-      
+
       {/* Exclude Section */}
       <div className="mb-4">
-        <h4 className="mb-2 font-bold text-gray-900">제외</h4>
+        <div className="flex justify-between items-center mb-2">
+          <h4 className="font-bold text-gray-900">제외</h4>
+          <Counter count={excludedKeywords.length} maxCount={maxExcludeLength} />
+        </div>
         <div className="flex gap-2 mb-2">
           <div className="relative flex-1">
             <input
               type="text"
               value={excludeKeyword}
-              onChange={(e) => setExcludeKeyword(e.target.value.slice(0, maxExcludeLength))}
+              onChange={(e) =>
+                setExcludeKeyword(e.target.value.slice(0, maxExcludeLength))
+              }
               onKeyPress={handleKeyPress}
               placeholder="추가 단어 포함 공고를 제외합니다."
-              className="p-3 pr-16 w-full rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+              className="p-3 pr-16 w-full rounded-lg border border-gray-300 focus:outline-none focus:border-black"
             />
-            <span className="absolute right-3 top-1/2 text-sm text-red-500 transform -translate-y-1/2">
-              {excludeKeyword.length}/{maxExcludeLength}
-            </span>
           </div>
           <button
             onClick={handleAddExclude}
@@ -76,7 +84,7 @@ const KeywordFilter: React.FC = () => {
             추가
           </button>
         </div>
-        
+
         {/* Excluded Keywords List */}
         {excludedKeywords.length > 0 && (
           <div className="flex flex-wrap gap-2">

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
 import RadioTypeButton from "../common/RadioTypeButton";
+import CheckBox from "../common/CheckBox";
 
 interface TimeSlot {
   id: string;
@@ -42,7 +43,7 @@ const WorkTimes: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무시간</h3>
         <Counter count={selectedTimes.length} maxCount={maxSelections} />
@@ -71,7 +72,10 @@ const WorkTimes: React.FC = () => {
             selected={selectedTimes.includes(slot.id)}
             maxSelections={maxSelections}
             handleClick={() => handleTimeToggle(slot.id)}
-            isDisabled={!selectedTimes.includes(slot.id) && selectedTimes.length >= maxSelections}
+            isDisabled={
+              !selectedTimes.includes(slot.id) &&
+              selectedTimes.length >= maxSelections
+            }
           />
           // <button
           //   key={slot.id}
@@ -101,29 +105,12 @@ const WorkTimes: React.FC = () => {
       </div>
 
       {/* Exclude Negotiation Option */}
-      <div className="flex items-center">
-        <button
-          onClick={() => setExcludeNegotiation(!excludeNegotiation)}
-          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mr-2 ${
-            excludeNegotiation
-              ? "bg-[var(--primary-color)] border-[var(--primary-color)]"
-              : "bg-gray-200 border-gray-300"
-          }`}
-        >
-          {excludeNegotiation && (
-            <svg
-              className="w-3 h-3 text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
-        </button>
+      <div className="flex gap-2 items-center">
+        <CheckBox
+          checked={excludeNegotiation}
+          onChange={() => setExcludeNegotiation(!excludeNegotiation)}
+        />
+
         <span className="text-sm text-gray-700">협의제외</span>
       </div>
     </div>

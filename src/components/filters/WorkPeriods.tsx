@@ -33,7 +33,7 @@ const WorkPeriods: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무기간</h3>
         <Counter count={selectedPeriods.length} maxCount={maxSelections} />

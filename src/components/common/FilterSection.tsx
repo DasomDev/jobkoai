@@ -17,7 +17,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   children,
 }) => {
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-3">
         <h3 className="font-bold text-gray-900">{title}</h3>
         <Counter count={count} maxCount={maxCount} />

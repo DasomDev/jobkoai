@@ -3,6 +3,7 @@ import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
 import condition from "../../data/condition.json";
 import RadioTypeButton from "../common/RadioTypeButton";
+import CheckBox from "../common/CheckBox";
 
 interface WorkDayOption {
   id: string;
@@ -53,7 +54,7 @@ const WorkDays: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무요일</h3>
         {selectionMode === "list" && (
@@ -113,21 +114,11 @@ const WorkDays: React.FC = () => {
 
       {/* Exclude Negotiation Checkbox */}
       <div className="flex gap-2 items-center">
-        <button
-          onClick={() => setExcludeNegotiation(!excludeNegotiation)}
-          className={`
-            w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors
-            ${
-              excludeNegotiation
-                ? "bg-red-500 border-red-500"
-                : "bg-white border-gray-300"
-            }
-          `}
-        >
-          {excludeNegotiation && (
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-          )}
-        </button>
+        <CheckBox
+          checked={excludeNegotiation}
+          onChange={() => setExcludeNegotiation(!excludeNegotiation)}
+        />
+
         <span className="text-sm text-gray-700">협의제외</span>
       </div>
     </div>

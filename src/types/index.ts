@@ -13,42 +13,6 @@ export interface SearchFilters {
   benefits: string[];
 }
 
-// 필터 옵션 버튼 구성
-// 직업 카테고리 타입
-export interface JobCategory {
-  id: string;
-  name: string;
-  icon: string;
-}
-
-// 지역 타입
-export interface Location {
-  id: string;
-  name: string;
-  districts?: string[];
-}
-
-// 급여 범위 타입
-export interface SalaryRange {
-  id: string;
-  label: string;
-  min: number;
-  max: number;
-}
-
-// 근무일 타입
-export interface WorkDay {
-  id: string;
-  name: string;
-  shortName: string;
-}
-
-// 근무시간 타입
-export interface WorkTime {
-  id: string;
-  name: string;
-  description: string;
-}
 
 
 

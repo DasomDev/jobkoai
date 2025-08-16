@@ -35,7 +35,7 @@ const WorkType: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">고용형태</h3>
         <Counter count={selectedTypes.length} maxCount={maxSelections} />
