@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import Counter from '../common/Counter';
+import React, { useState } from "react";
+import Counter from "../common/Counter";
+import FilterOptionButton from "../common/FilterOptionButton";
 
 interface WorkPeriod {
   id: string;
@@ -8,13 +9,13 @@ interface WorkPeriod {
 }
 
 const workPeriods: WorkPeriod[] = [
-  { id: '1day', label: '하루(1일)' },
-  { id: 'lessThan1Week', label: '1주일이하' },
-  { id: '1WeekTo1Month', label: '1주일~1개월' },
-  { id: '1MonthTo3Months', label: '1개월~3개월' },
-  { id: '3MonthsTo6Months', label: '3개월~6개월' },
-  { id: '6MonthsTo1Year', label: '6개월~1년' },
-  { id: 'moreThan1Year', label: '1년이상' }
+  { id: "1day", label: "하루(1일)" },
+  { id: "lessThan1Week", label: "1주일이하" },
+  { id: "1WeekTo1Month", label: "1주일~1개월" },
+  { id: "1MonthTo3Months", label: "1개월~3개월" },
+  { id: "3MonthsTo6Months", label: "3개월~6개월" },
+  { id: "6MonthsTo1Year", label: "6개월~1년" },
+  { id: "moreThan1Year", label: "1년이상" },
 ];
 
 const WorkLength: React.FC = () => {
@@ -22,9 +23,9 @@ const WorkLength: React.FC = () => {
   const maxSelections = 6;
 
   const handlePeriodToggle = (periodId: string) => {
-    setSelectedPeriods(prev => {
+    setSelectedPeriods((prev) => {
       if (prev.includes(periodId)) {
-        return prev.filter(id => id !== periodId);
+        return prev.filter((id) => id !== periodId);
       } else {
         if (prev.length < maxSelections) {
           return [...prev, periodId];
@@ -39,10 +40,20 @@ const WorkLength: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무기간</h3>
         <Counter count={selectedPeriods.length} maxCount={maxSelections} />
-      </div>  
-      
+      </div>
+
       <div className="flex flex-wrap gap-2">
         {workPeriods.map((period) => (
+          <FilterOptionButton
+            id={period.id}
+            label={period.label}
+            selected={selectedPeriods.includes(period.id)}
+            maxSelections={maxSelections}
+            handleClick={() => handlePeriodToggle(period.id)}
+            isDisabled={!selectedPeriods.includes(period.id) && selectedPeriods.length >= maxSelections}
+          />
+        ))}
+        {/* {workPeriods.map((period) => (
           <button
             key={period.id}
             onClick={() => handlePeriodToggle(period.id)}
@@ -61,7 +72,7 @@ const WorkLength: React.FC = () => {
           >
             {period.label}
           </button>
-        ))}
+        ))} */}
       </div>
     </div>
   );

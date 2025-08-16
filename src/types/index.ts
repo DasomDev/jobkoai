@@ -13,6 +13,7 @@ export interface SearchFilters {
   benefits: string[];
 }
 
+// 필터 옵션 버튼 구성
 // 직업 카테고리 타입
 export interface JobCategory {
   id: string;

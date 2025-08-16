@@ -7,6 +7,7 @@ import WorkDays from "./components/filters/WorkDays";
 import GenderFilter from "./components/filters/GenderFilter";
 import WorkType from "./components/filters/WorkType";
 import KeywordFilter from "./components/filters/KeywordFilter";
+import WorkTimes from "./components/filters/WorkTimes";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <JobCategoryFilter />
         <WorkLength />
         <WorkDays />
+        <WorkTimes />
         <GenderFilter />
         <WorkType />
         <KeywordFilter />

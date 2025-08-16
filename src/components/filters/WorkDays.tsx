@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Counter from "../common/Counter";
+import FilterOptionButton from "../common/FilterOptionButton";
 
 interface WorkDayOption {
   id: string;
@@ -81,32 +82,20 @@ const WorkDays: React.FC = () => {
 
       {/* Work Day Options */}
       {selectionMode === "list" && (
-        <div className="grid grid-cols-4 gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4">
           {workDayOptions.map((option) => (
-            <button
+            <FilterOptionButton
               key={option.id}
-              onClick={() => handleDayToggle(option.id)}
-              disabled={
+              id={option.id}
+              label={option.label}
+              selected={selectedDays.includes(option.id)}
+              maxSelections={maxSelections}
+              handleClick={() => handleDayToggle(option.id)}
+              isDisabled={
                 !selectedDays.includes(option.id) &&
                 selectedDays.length >= maxSelections
               }
-              className={`
-                p-3 rounded-lg text-sm font-medium transition-colors
-                ${
-                  selectedDays.includes(option.id)
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }
-                ${
-                  !selectedDays.includes(option.id) &&
-                  selectedDays.length >= maxSelections
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }
-              `}
-            >
-              {option.label}
-            </button>
+            />
           ))}
         </div>
       )}
