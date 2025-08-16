@@ -26,18 +26,14 @@ const FilterOptionButton = ({
       ${
         selected
           ? "border border-[#ffddd2] bg-[#fff8f6] text-[var(--primary-color)]"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          : "bg-gray-100 text-gray-700 "
       }
-      ${
-        isDisabled
-          ? "opacity-50 cursor-not-allowed"
-          : "cursor-pointer"
-      }
+      ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
     `}
       onClick={handleClick}
       disabled={isDisabled}
     >
-      {label} {selected}
+      {label}
     </button>
   );
 };

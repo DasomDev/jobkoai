@@ -1,24 +1,37 @@
 import React, { useState } from "react";
 import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
+import condition from "../../data/condition.json";
 
 interface WorkDayOption {
   id: string;
   label: string;
 }
 
-const workDayOptions: WorkDayOption[] = [
-  { id: "monToSun", label: "월~일" },
-  { id: "monToSat", label: "월~토" },
-  { id: "monToFri", label: "월~금" },
-  { id: "weekend", label: "주말(토,일)" },
-  { id: "6days", label: "주6일" },
-  { id: "5days", label: "주5일" },
-  { id: "4days", label: "주4일" },
-  { id: "3days", label: "주3일" },
-  { id: "2days", label: "주2일" },
-  { id: "1day", label: "주1일" },
-];
+// const workDayOptions: WorkDayOption[] = [
+//   { id: "monToSun", label: "월~일" },
+//   { id: "monToSat", label: "월~토" },
+//   { id: "monToFri", label: "월~금" },
+//   { id: "weekend", label: "주말(토,일)" },
+//   { id: "6days", label: "주6일" },
+//   { id: "5days", label: "주5일" },
+//   { id: "4days", label: "주4일" },
+//   { id: "3days", label: "주3일" },
+//   { id: "2days", label: "주2일" },
+//   { id: "1day", label: "주1일" },
+// ];
+
+const workDayOptions: WorkDayOption[] = condition.workDays.collection.map(
+  (item) => ({
+    id: item,
+    label: item,
+  })
+);
+const dayNames = ["월", "화", "수", "목", "금", "토", "일"];
+const individualDays = dayNames.map((day) => ({
+  id: day,
+  label: day,
+}));
 
 type SelectionMode = "list" | "direct";
 
@@ -40,6 +53,14 @@ const WorkDays: React.FC = () => {
           return prev;
         }
       });
+    } else {
+      setSelectedDays((prev) => {
+        if (prev.includes(dayId)) {
+          return prev.filter((id) => id !== dayId);
+        } else {
+          return [...prev, dayId];
+        }
+      });
     }
   };
 
@@ -47,7 +68,9 @@ const WorkDays: React.FC = () => {
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무요일</h3>
-        <Counter count={selectedDays.length} maxCount={maxSelections} />
+        {selectionMode === "list" && (
+          <Counter count={selectedDays.length} maxCount={maxSelections} />
+        )}
       </div>
 
       {/* Selection Mode Buttons */}
@@ -102,8 +125,18 @@ const WorkDays: React.FC = () => {
 
       {/* Direct Selection Mode */}
       {selectionMode === "direct" && (
-        <div className="p-4 mb-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600">직접 선택 모드 - 구현 예정</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {individualDays.map((day) => (
+            <FilterOptionButton
+              key={day.id}
+              id={day.id}
+              label={day.label}
+              selected={selectedDays.includes(day.id)}
+              maxSelections={maxSelections}
+              handleClick={() => handleDayToggle(day.id)}
+              isDisabled={false}
+            />
+          ))}
         </div>
       )}
 
