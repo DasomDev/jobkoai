@@ -14,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <div className="h-[68px] bg-[#f8f8f8] flex justify-center text-sm items-center text-[#6a6a6a]">모든 채용메뉴에 공통 반영됩니다.</div>
       <div className="flex flex-col gap-10 pb-[65px] px-5 py-4">
         <WorkAreaFilter />
         <JobCategoryFilter />

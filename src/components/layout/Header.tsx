@@ -1,6 +1,6 @@
 const Header = () => {
   return (
-    <header className="flex justify-between h-[55px] px-5 border-b">
+    <header className="flex justify-between h-[55px] px-5">
       <div className="flex gap-2 items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"

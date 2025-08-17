@@ -6,7 +6,7 @@ type Gender = "male" | "female" | null;
 
 const GenderFilter: React.FC = () => {
   const [selectedGender, setSelectedGender] = useState<Gender>(null);
-  const [excludeIrrelevant, setExcludeIrrelevant] = useState(true);
+  const [excludeIrrelevant, setExcludeIrrelevant] = useState(false);
 
   const handleGenderSelect = (gender: Gender) => {
     setSelectedGender(selectedGender === gender ? null : gender);

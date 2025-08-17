@@ -77,30 +77,6 @@ const WorkTimes: React.FC = () => {
               selectedTimes.length >= maxSelections
             }
           />
-          // <button
-          //   key={slot.id}
-          //   onClick={() => handleTimeToggle(slot.id)}
-          //   disabled={
-          //     !selectedTimes.includes(slot.id) &&
-          //     selectedTimes.length >= maxSelections
-          //   }
-          //   className={`
-          //     py-[10px] px-[16px] flex items-center justify-center h-[34px] rounded-full text-sm font-medium transition-colors
-          //     ${
-          //       selectedTimes.includes(slot.id)
-          //         ? "border border-[#ffddd2] bg-[#fff8f6] text-[var(--primary-color)]"
-          //         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          //     }
-          //     ${
-          //       !selectedTimes.includes(slot.id) &&
-          //       selectedTimes.length >= maxSelections
-          //         ? "opacity-50 cursor-not-allowed"
-          //         : "cursor-pointer"
-          //     }
-          //   `}
-          // >
-          //   {slot.label}
-          // </button>
         ))}
       </div>
 

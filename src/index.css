@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --primary-color: #FF501B;
+  --primary-color: #ff501b;
+  --gray-color: #6a6a6a;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Pretendard Variable, -apple-system, BlinkMacSystemFont,
+    Apple SD Gothic Neo, Malgun Gothic, 맑은 고딕, arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
