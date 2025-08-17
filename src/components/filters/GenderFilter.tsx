@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
+
+/** Store */
+import useJobFilterStore from "../../Store/useJobfilter.store";
+
+/** Components */
 import RadioTypeButton from "../common/RadioTypeButton";
 import CheckBox from "../common/CheckBox";
 
 type Gender = "male" | "female" | null;
 
 const GenderFilter: React.FC = () => {
-  const [selectedGender, setSelectedGender] = useState<Gender>(null);
-  const [excludeIrrelevant, setExcludeIrrelevant] = useState(false);
+  const {
+    selectedGender,
+    setSelectedGender,
+    excludeIrrelevantGender,
+    setExcludeIrrelevantGender,
+  } = useJobFilterStore();
 
   const handleGenderSelect = (gender: Gender) => {
     setSelectedGender(selectedGender === gender ? null : gender);
@@ -36,8 +45,8 @@ const GenderFilter: React.FC = () => {
       {/* Exclude Irrelevant Checkbox */}
       <div className="flex gap-2 items-center">
         <CheckBox
-          checked={excludeIrrelevant}
-          onChange={() => setExcludeIrrelevant(!excludeIrrelevant)}
+          checked={excludeIrrelevantGender}
+          onChange={() => setExcludeIrrelevantGender(!excludeIrrelevantGender)}
         />
         <span className="text-sm text-gray-900">무관제외</span>
       </div>
