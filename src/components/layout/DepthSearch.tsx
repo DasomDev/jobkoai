@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDepthSearch, DepthSearchConfig } from "../../hooks/useDepthSearch";
 
 interface DepthItem {
   id: string;
@@ -28,21 +29,32 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
   showGroupOption = false,
   groupOptionLabel = "유사동묶기?",
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [groupSimilar, setGroupSimilar] = useState(false);
+  // useDepthSearch 훅 사용
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedItems,
+    groupSimilar,
+    setGroupSimilar,
+    filteredColumns,
+    handleItemSelect,
+    handleConfirm,
+    reset
+  } = useDepthSearch({
+    type: 'custom',
+    title,
+    searchPlaceholder,
+    columns,
+    showGroupOption,
+    groupOptionLabel
+  });
 
-  const handleItemSelect = (item: DepthItem, columnIndex: number) => {
-    // Update selected items based on column
-    const newSelectedItems = [...selectedItems];
-    newSelectedItems[columnIndex] = item.name;
-    setSelectedItems(newSelectedItems);
-  };
-
-  const handleConfirm = () => {
-    onSelect(selectedItems.filter((item) => item));
-    onClose();
-  };
+  // 컴포넌트가 언마운트될 때 reset 호출
+  React.useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, [reset]);
 
   return (
     <div className="absolute inset-0 top-0 bottom-0 z-50 justify-center items-center bg-black bg-opacity-50">
@@ -126,7 +138,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
 
         {/* Column Headers */}
         <div className="flex border-b border-gray-200">
-          {columns.map((column, index) => (
+          {filteredColumns.map((column, index) => (
             <div
               key={index}
               className="flex-1 p-3 text-sm font-medium text-gray-700 bg-gray-50"
@@ -138,7 +150,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
 
         {/* Content Columns */}
         <div className="flex overflow-hidden h-96">
-          {columns.map((column, columnIndex) => (
+          {filteredColumns.map((column, columnIndex) => (
             <div
               key={columnIndex}
               className="overflow-y-auto flex-1 border-r border-gray-200 last:border-r-0"
@@ -169,7 +181,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
             취소
           </button>
           <button
-            onClick={handleConfirm}
+            onClick={() => handleConfirm(onSelect, onClose)}
             className="px-4 w-full h-[48px] text-sm text-white bg-[var(--primary-color)] rounded-lg"
           >
             확인

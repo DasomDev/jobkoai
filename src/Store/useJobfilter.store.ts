@@ -12,7 +12,8 @@ interface JobFilterStore {
   selectedKeyword: string; // 키워드
   excludeIrrelevantGender: boolean; // 관련없음 제외
 
-  isShowDepthSearch: boolean;
+  isShowDepthSearch: boolean; // 깊이 검색 표시 여부
+  
 
   // Actions
   setSelectedAreas: (areas: string[]) => void; // 근무지역
