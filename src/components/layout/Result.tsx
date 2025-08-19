@@ -1,4 +1,9 @@
-const Result = () => {
+import React from "react";
+import { useFilterSearch } from "../../hooks/useFilterSearch";
+
+const Result: React.FC = () => {
+  const { isSearching, searchResults, triggerSearch } = useFilterSearch(500); // 500ms 디바운스
+
   return (
     <div className="fixed right-0 bottom-0 left-0 p-2 bg-white border-t h-[65px] font-semibold">
       <h3 className="bg-[var(--primary-color)] text-white rounded-lg h-full flex items-center justify-center">

@@ -47,9 +47,9 @@ function App() {
   return (
     <div className="App">
       <Header />
-      {/* <div>
-        <p>selectedGender: {selectedGender}</p>
-      </div> */}
+      <div>
+        {/* <p>selectedWorkPeriods: {selectedWorkPeriods}</p> */}
+      </div>
 
       {isShowDepthSearch && (
         <DepthSearch
