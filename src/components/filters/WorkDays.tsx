@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Counter from "../common/Counter";
+import useJobFilterStore from "../../Store/useJobfilter.store";
 import FilterOptionButton from "../common/FilterOptionButton";
 import condition from "../../data/condition.json";
 import RadioTypeButton from "../common/RadioTypeButton";
@@ -25,31 +26,24 @@ const individualDays = dayNames.map((day) => ({
 type SelectionMode = "list" | "direct";
 
 const WorkDays: React.FC = () => {
+  const { selectedWorkDays, setSelectedWorkDays } = useJobFilterStore();
   const [selectionMode, setSelectionMode] = useState<SelectionMode>("list");
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [excludeNegotiation, setExcludeNegotiation] = useState(false);
   const maxSelections = 3;
 
   const handleDayToggle = (dayId: string) => {
     if (selectionMode === "list") {
-      setSelectedDays((prev) => {
-        if (prev.includes(dayId)) {
-          return prev.filter((id) => id !== dayId);
-        } else {
-          if (prev.length < maxSelections) {
-            return [...prev, dayId];
-          }
-          return prev;
-        }
-      });
+      const newDays = selectedWorkDays.includes(dayId)
+        ? selectedWorkDays.filter((id: string) => id !== dayId)
+        : selectedWorkDays.length < maxSelections
+        ? [...selectedWorkDays, dayId]
+        : selectedWorkDays;
+      setSelectedWorkDays(newDays);
     } else {
-      setSelectedDays((prev) => {
-        if (prev.includes(dayId)) {
-          return prev.filter((id) => id !== dayId);
-        } else {
-          return [...prev, dayId];
-        }
-      });
+      const newDays = selectedWorkDays.includes(dayId)
+        ? selectedWorkDays.filter((id: string) => id !== dayId)
+        : [...selectedWorkDays, dayId];
+      setSelectedWorkDays(newDays);
     }
   };
 
@@ -58,7 +52,7 @@ const WorkDays: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무요일</h3>
         {selectionMode === "list" && (
-          <Counter count={selectedDays.length} maxCount={maxSelections} />
+          <Counter count={selectedWorkDays.length} maxCount={maxSelections} />
         )}
       </div>
 
@@ -83,12 +77,12 @@ const WorkDays: React.FC = () => {
               key={option.id}
               id={option.id}
               label={option.label}
-              selected={selectedDays.includes(option.id)}
+              selected={selectedWorkDays.includes(option.id)}
               maxSelections={maxSelections}
               handleClick={() => handleDayToggle(option.id)}
               isDisabled={
-                !selectedDays.includes(option.id) &&
-                selectedDays.length >= maxSelections
+                !selectedWorkDays.includes(option.id) &&
+                selectedWorkDays.length >= maxSelections
               }
             />
           ))}
@@ -103,7 +97,7 @@ const WorkDays: React.FC = () => {
               key={day.id}
               id={day.id}
               label={day.label}
-              selected={selectedDays.includes(day.id)}
+              selected={selectedWorkDays.includes(day.id)}
               maxSelections={maxSelections}
               handleClick={() => handleDayToggle(day.id)}
               isDisabled={false}
