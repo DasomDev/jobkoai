@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Counter from "../common/Counter";
+
 import useJobFilterStore from "../../Store/useJobfilter.store";
 import FilterOptionButton from "../common/FilterOptionButton";
 import condition from "../../data/condition.json";

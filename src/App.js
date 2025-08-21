@@ -47,10 +47,6 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div>
-        {/* <p>selectedWorkPeriods: {selectedWorkPeriods}</p> */}
-      </div>
-
       {isShowDepthSearch && (
         <DepthSearch
           title="업직종 선택"

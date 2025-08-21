@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+
+import useJobFilterStore from "../../Store/useJobfilter.store";
+
+/** Components */
 import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
 import RadioTypeButton from "../common/RadioTypeButton";
@@ -12,8 +16,9 @@ interface TimeSlot {
 type SelectionMode = "list" | "direct";
 
 const WorkTimes: React.FC = () => {
+  const { selectedWorkTimes, setSelectedWorkTimes } = useJobFilterStore();
   const [selectionMode, setSelectionMode] = useState<"list" | "direct">("list");
-  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+  // const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
   const [excludeNegotiation, setExcludeNegotiation] = useState(false);
   const maxSelections = 3;
 
@@ -30,23 +35,19 @@ const WorkTimes: React.FC = () => {
   ];
 
   const handleTimeToggle = (timeId: string) => {
-    setSelectedTimes((prev) => {
-      if (prev.includes(timeId)) {
-        return prev.filter((id) => id !== timeId);
-      } else {
-        if (prev.length >= maxSelections) {
-          return prev;
-        }
-        return [...prev, timeId];
-      }
-    });
+    const newTimes = selectedWorkTimes.includes(timeId)
+      ? selectedWorkTimes.filter((id: string) => id !== timeId)
+      : selectedWorkTimes.length >= maxSelections
+      ? selectedWorkTimes
+      : [...selectedWorkTimes, timeId];
+    setSelectedWorkTimes(newTimes);
   };
 
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">근무시간</h3>
-        <Counter count={selectedTimes.length} maxCount={maxSelections} />
+        <Counter count={selectedWorkTimes.length} maxCount={maxSelections} />
       </div>
 
       {/* Selection Mode Tabs */}
@@ -69,12 +70,12 @@ const WorkTimes: React.FC = () => {
             key={slot.id}
             id={slot.id}
             label={slot.label}
-            selected={selectedTimes.includes(slot.id)}
+            selected={selectedWorkTimes.includes(slot.id)}
             maxSelections={maxSelections}
             handleClick={() => handleTimeToggle(slot.id)}
             isDisabled={
-              !selectedTimes.includes(slot.id) &&
-              selectedTimes.length >= maxSelections
+              !selectedWorkTimes.includes(slot.id) &&
+              selectedWorkTimes.length >= maxSelections
             }
           />
         ))}

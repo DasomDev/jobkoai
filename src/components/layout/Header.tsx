@@ -1,4 +1,9 @@
+/** Store */
+import useJobFilterStore from "../../Store/useJobfilter.store";
+
 const Header = () => {
+  const { initFilter } = useJobFilterStore();
+
   return (
     <header className="flex justify-between h-[55px] px-5">
       <div className="flex gap-2 items-center">
@@ -19,7 +24,9 @@ const Header = () => {
 
         <h3 className="font-bold">검색조건설정</h3>
       </div>
-      <button className="text-sm">초기화</button>
+      <button onClick={initFilter} className="text-sm">
+        초기화
+      </button>
     </header>
   );
 };

@@ -8,7 +8,7 @@ interface JobFilterStore {
   selectedWorkDays: string[]; // 근무요일
   selectedWorkTimes: string[]; // 근무시간
   selectedGender: "male" | "female" | null; // 성별
-  selectedWorkType: string; // 고용형태
+  selectedWorkType: string[]; // 고용형태
   selectedKeyword: string; // 키워드
   excludeIrrelevantGender: boolean; // 관련없음 제외
 
@@ -26,9 +26,11 @@ interface JobFilterStore {
   setSelectedWorkTimes: (times: string[]) => void; // 근무시간
   setSelectedGender: (gender: "male" | "female" | null) => void; // 성별
   setSelectedKeyword: (keyword: string) => void; // 키워드
-  setSelectedWorkType: (type: string) => void; // 고용형태
+  setSelectedWorkType: (type: string[]) => void; // 고용형태
   setExcludeIrrelevantGender: (excludeIrrelevant: boolean) => void; // 관련없음 제외
   setIsShowDepthSearch: (isShowDepthSearch: boolean) => void; // 깊이 검색 표시 여부
+
+  initFilter: () => void; // 필터 초기화
   
   // Search actions
   searchJobs: () => Promise<void>; // 검색 실행
@@ -43,7 +45,7 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
   selectedWorkDays: [],
   selectedWorkTimes: [],
   selectedGender: null,
-  selectedWorkType: "",
+  selectedWorkType: [],
   selectedKeyword: "",
   excludeIrrelevantGender: false,
   isShowDepthSearch: false,
@@ -107,6 +109,20 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
     } finally {
       set({ isSearching: false });
     }
+  },
+
+  initFilter: () => {
+    set({
+      selectedAreas: [],
+      selectedJobCategories: [],
+      selectedWorkPeriods: [],
+      selectedWorkDays: [],
+      selectedWorkTimes: [],
+      selectedGender: null,
+      selectedWorkType: [],
+      selectedKeyword: "",
+      excludeIrrelevantGender: false,
+    });
   },
 }));
 

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import FilterOptionButton from "../common/FilterOptionButton";
 import Counter from "../common/Counter";
 
+import useJobFilterStore from "../../Store/useJobfilter.store";
+
 interface EmploymentType {
   id: string;
   label: string;
@@ -18,27 +20,24 @@ const employmentTypes: EmploymentType[] = [
 ];
 
 const WorkType: React.FC = () => {
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const { selectedWorkType, setSelectedWorkType } = useJobFilterStore();
+  // const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const maxSelections = 7;
 
   const handleTypeToggle = (typeId: string) => {
-    setSelectedTypes((prev) => {
-      if (prev.includes(typeId)) {
-        return prev.filter((id) => id !== typeId);
-      } else {
-        if (prev.length < maxSelections) {
-          return [...prev, typeId];
-        }
-        return prev;
-      }
-    });
+    const newTypes = selectedWorkType.includes(typeId)
+      ? selectedWorkType.filter((id: string) => id !== typeId)
+      : selectedWorkType.length >= maxSelections
+      ? selectedWorkType
+      : [...selectedWorkType, typeId];
+    setSelectedWorkType(newTypes);
   };
 
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-gray-900">고용형태</h3>
-        <Counter count={selectedTypes.length} maxCount={maxSelections} />
+        <Counter count={selectedWorkType.length} maxCount={maxSelections} />
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -47,12 +46,12 @@ const WorkType: React.FC = () => {
             key={type.id}
             id={type.id}
             label={type.label}
-            selected={selectedTypes.includes(type.id)}
+            selected={selectedWorkType.includes(type.id)}
             maxSelections={maxSelections}
             handleClick={() => handleTypeToggle(type.id)}
             isDisabled={
-              !selectedTypes.includes(type.id) &&
-              selectedTypes.length >= maxSelections
+              !selectedWorkType.includes(type.id) &&
+              selectedWorkType.length >= maxSelections
             }
           />
         ))}
