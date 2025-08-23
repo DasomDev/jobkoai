@@ -61,7 +61,7 @@ const KeywordFilter: React.FC = () => {
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
           <h4 className="font-bold text-gray-900">제외</h4>
-          <Counter count={excludedKeywords.length} maxCount={maxExcludeLength} />
+          <Counter count={excludedKeywords.join('').length} maxCount={maxExcludeLength} />
         </div>
         <div className="flex gap-2 mb-2">
           <div className="relative flex-1">
@@ -79,7 +79,7 @@ const KeywordFilter: React.FC = () => {
           <button
             onClick={handleAddExclude}
             disabled={!excludeKeyword.trim()}
-            className="px-4 py-3 font-medium text-white bg-gray-800 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-3 font-medium text-white bg-black rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             추가
           </button>
