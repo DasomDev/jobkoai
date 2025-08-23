@@ -16,10 +16,13 @@ interface TimeSlot {
 type SelectionMode = "list" | "direct";
 
 const WorkTimes: React.FC = () => {
-  const { selectedWorkTimes, setSelectedWorkTimes } = useJobFilterStore();
+  const { 
+    selectedWorkTimes, 
+    setSelectedWorkTimes,
+    excludeNegotiation,
+    setExcludeNegotiation
+  } = useJobFilterStore();
   const [selectionMode, setSelectionMode] = useState<"list" | "direct">("list");
-  // const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
-  const [excludeNegotiation, setExcludeNegotiation] = useState(false);
   const maxSelections = 3;
 
   const timeSlots: TimeSlot[] = [

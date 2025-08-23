@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FilterSection from '../common/FilterSection';
 import useJobFilterStore from '../../Store/useJobfilter.store';
 
 // src/components/filters/WorkAreaFilter.tsx
 const WorkAreaFilter: React.FC = () => {
-  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
-  const { setIsShowDepthSearch } = useJobFilterStore();
+  const { selectedAreas, setIsShowDepthSearch } = useJobFilterStore();
   return (
     <FilterSection
       title="근무지역"

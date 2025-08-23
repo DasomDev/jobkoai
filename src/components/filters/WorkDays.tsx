@@ -27,9 +27,13 @@ const individualDays = dayNames.map((day) => ({
 type SelectionMode = "list" | "direct";
 
 const WorkDays: React.FC = () => {
-  const { selectedWorkDays, setSelectedWorkDays } = useJobFilterStore();
+  const { 
+    selectedWorkDays, 
+    setSelectedWorkDays,
+    excludeNegotiation,
+    setExcludeNegotiation
+  } = useJobFilterStore();
   const [selectionMode, setSelectionMode] = useState<SelectionMode>("list");
-  const [excludeNegotiation, setExcludeNegotiation] = useState(false);
   const maxSelections = 3;
 
   const handleDayToggle = (dayId: string) => {

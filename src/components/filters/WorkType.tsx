@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import FilterOptionButton from "../common/FilterOptionButton";
 import Counter from "../common/Counter";
 
@@ -21,7 +21,6 @@ const employmentTypes: EmploymentType[] = [
 
 const WorkType: React.FC = () => {
   const { selectedWorkType, setSelectedWorkType } = useJobFilterStore();
-  // const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const maxSelections = 7;
 
   const handleTypeToggle = (typeId: string) => {

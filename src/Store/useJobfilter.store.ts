@@ -10,7 +10,9 @@ interface JobFilterStore {
   selectedGender: "male" | "female" | null; // 성별
   selectedWorkType: string[]; // 고용형태
   selectedKeyword: string; // 키워드
+  excludedKeywords: string[]; // 제외 키워드
   excludeIrrelevantGender: boolean; // 관련없음 제외
+  excludeNegotiation: boolean; // 협의제외
 
   isShowDepthSearch: boolean; // 깊이 검색 표시 여부
   
@@ -26,8 +28,10 @@ interface JobFilterStore {
   setSelectedWorkTimes: (times: string[]) => void; // 근무시간
   setSelectedGender: (gender: "male" | "female" | null) => void; // 성별
   setSelectedKeyword: (keyword: string) => void; // 키워드
+  setExcludedKeywords: (keywords: string[]) => void; // 제외 키워드
   setSelectedWorkType: (type: string[]) => void; // 고용형태
   setExcludeIrrelevantGender: (excludeIrrelevant: boolean) => void; // 관련없음 제외
+  setExcludeNegotiation: (excludeNegotiation: boolean) => void; // 협의제외
   setIsShowDepthSearch: (isShowDepthSearch: boolean) => void; // 깊이 검색 표시 여부
 
   initFilter: () => void; // 필터 초기화
@@ -47,7 +51,9 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
   selectedGender: null,
   selectedWorkType: [],
   selectedKeyword: "",
+  excludedKeywords: [],
   excludeIrrelevantGender: false,
+  excludeNegotiation: false,
   isShowDepthSearch: false,
   isSearching: false,
   searchResults: [],
@@ -61,8 +67,11 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
   setSelectedGender: (gender) => set({ selectedGender: gender }),
   setSelectedWorkType: (type) => set({ selectedWorkType: type }),
   setSelectedKeyword: (keyword) => set({ selectedKeyword: keyword }),
+  setExcludedKeywords: (keywords) => set({ excludedKeywords: keywords }),
   setExcludeIrrelevantGender: (excludeIrrelevantGender) =>
     set({ excludeIrrelevantGender: excludeIrrelevantGender }),
+  setExcludeNegotiation: (excludeNegotiation) =>
+    set({ excludeNegotiation: excludeNegotiation }),
   setIsShowDepthSearch: (isShowDepthSearch) =>
     set({ isShowDepthSearch: isShowDepthSearch }),
   setIsSearching: (isSearching) => set({ isSearching }),
@@ -83,7 +92,9 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
         gender: state.selectedGender,
         workType: state.selectedWorkType,
         keyword: state.selectedKeyword,
+        excludedKeywords: state.excludedKeywords,
         excludeIrrelevantGender: state.excludeIrrelevantGender,
+        excludeNegotiation: state.excludeNegotiation,
       };
       
       console.log('검색 파라미터:', searchParams);
@@ -121,7 +132,9 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
       selectedGender: null,
       selectedWorkType: [],
       selectedKeyword: "",
+      excludedKeywords: [],
       excludeIrrelevantGender: false,
+      excludeNegotiation: false,
     });
   },
 }));

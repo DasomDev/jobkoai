@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import Counter from "../common/Counter";
+import useJobFilterStore from "../../Store/useJobfilter.store";
 
 const KeywordFilter: React.FC = () => {
-  const [includeKeyword, setIncludeKeyword] = useState("");
+  const { 
+    selectedKeyword, 
+    setSelectedKeyword,
+    excludedKeywords,
+    setExcludedKeywords 
+  } = useJobFilterStore();
+  
   const [excludeKeyword, setExcludeKeyword] = useState("");
-  const [excludedKeywords, setExcludedKeywords] = useState<string[]>([]);
 
   const maxIncludeLength = 20;
   const maxExcludeLength = 100;
@@ -14,13 +20,13 @@ const KeywordFilter: React.FC = () => {
       excludeKeyword.trim() &&
       !excludedKeywords.includes(excludeKeyword.trim())
     ) {
-      setExcludedKeywords((prev) => [...prev, excludeKeyword.trim()]);
+      setExcludedKeywords([...excludedKeywords, excludeKeyword.trim()]);
       setExcludeKeyword("");
     }
   };
 
   const handleRemoveExclude = (keyword: string) => {
-    setExcludedKeywords((prev) => prev.filter((k) => k !== keyword));
+    setExcludedKeywords(excludedKeywords.filter((k: string) => k !== keyword));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -42,14 +48,14 @@ const KeywordFilter: React.FC = () => {
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
           <h4 className="font-bold text-gray-900">포함</h4>
-          <Counter count={includeKeyword.length} maxCount={maxIncludeLength} />
+          <Counter count={selectedKeyword.length} maxCount={maxIncludeLength} />
         </div>
         <div className="relative">
           <input
             type="text"
-            value={includeKeyword}
+            value={selectedKeyword}
             onChange={(e) =>
-              setIncludeKeyword(e.target.value.slice(0, maxIncludeLength))
+              setSelectedKeyword(e.target.value.slice(0, maxIncludeLength))
             }
             placeholder="입력 단어 포함 공고만 검색합니다."
             className="p-3 pr-16 w-full rounded-lg border border-gray-300 focus:outline-none focus:border-black"
@@ -88,7 +94,7 @@ const KeywordFilter: React.FC = () => {
         {/* Excluded Keywords List */}
         {excludedKeywords.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {excludedKeywords.map((keyword, index) => (
+            {excludedKeywords.map((keyword: string, index: number) => (
               <div
                 key={index}
                 className="flex gap-1 items-center px-3 py-1 bg-gray-100 rounded-full"

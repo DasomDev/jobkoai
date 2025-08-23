@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Counter from "../common/Counter";
 import FilterOptionButton from "../common/FilterOptionButton";
 import condition from "../../data/condition.json";
@@ -10,7 +10,6 @@ interface WorkPeriod {
 }
 
 const WorkPeriods: React.FC = () => {
-  // const [selectedPeriods, setSelectedPeriods] = useState<string[]>([]);
   const { selectedWorkPeriods, setSelectedWorkPeriods } = useJobFilterStore();
   const maxSelections = 6;
 

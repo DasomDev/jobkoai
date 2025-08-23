@@ -11,7 +11,9 @@ export const useFilterSearch = (debounceMs: number = 500) => {
     selectedGender,
     selectedWorkType,
     selectedKeyword,
+    excludedKeywords,
     excludeIrrelevantGender,
+    excludeNegotiation,
     searchJobs,
     isSearching,
     searchResults
@@ -46,7 +48,9 @@ export const useFilterSearch = (debounceMs: number = 500) => {
     selectedGender,
     selectedWorkType,
     selectedKeyword,
+    excludedKeywords,
     excludeIrrelevantGender,
+    excludeNegotiation,
     searchJobs,
     debounceMs
   ]);
