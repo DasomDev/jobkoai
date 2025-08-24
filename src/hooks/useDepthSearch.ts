@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import areaData from '../data/area.json';
 import jobData from '../data/job.json';
 
@@ -31,7 +31,7 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
       case 'area':
         return [
           {
-            title: '지역',
+            title: '시·도',
             data: [
               {
                 id: 'seoul',
@@ -44,11 +44,15 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
             ]
           },
           {
-            title: '구/군',
+            title: '시·구·군',
             data: areaData.collection.map((area, index) => ({
               id: `area-${index}`,
               name: area
             }))
+          },
+          {
+            title: '동·읍·면',
+            data: []
           }
         ];
       
@@ -56,23 +60,18 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
         return [
           {
             title: '업종',
-            data: [
-              {
-                id: 'food',
-                name: jobData.name,
-                children: jobData.collection.map((job, index) => ({
-                  id: `job-${index}`,
-                  name: job
-                }))
-              }
-            ]
+            data: jobData.categories.map((category) => ({
+              id: category.id,
+              name: category.name
+            }))
+          },
+          {
+            title: '세부업종',
+            data: []
           },
           {
             title: '직종',
-            data: jobData.collection.map((job, index) => ({
-              id: `job-${index}`,
-              name: job
-            }))
+            data: []
           }
         ];
       
@@ -80,9 +79,9 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
         return config.columns;
       
       default:
-        return config.columns;
+        return [];
     }
-  }, [config.type, config.columns]);
+  }, [config.type]);
 
   // Filter data based on search term
   const filteredColumns = useMemo(() => {
@@ -99,6 +98,12 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
   const handleItemSelect = (item: DepthItem, columnIndex: number) => {
     const newSelectedItems = [...selectedItems];
     newSelectedItems[columnIndex] = item.name;
+    
+    // Clear subsequent columns when a selection is made
+    for (let i = columnIndex + 1; i < newSelectedItems.length; i++) {
+      newSelectedItems[i] = '';
+    }
+    
     setSelectedItems(newSelectedItems);
   };
 
@@ -107,11 +112,11 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
     onClose();
   };
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setSearchTerm("");
     setSelectedItems([]);
     setGroupSimilar(false);
-  };
+  }, []);
 
   return {
     searchTerm,

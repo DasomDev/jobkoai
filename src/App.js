@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 /** Data  */
 import job from "./data/job.json";
+import area from "./data/area.json";
 
 /** Components */
 import Header from "./components/layout/Header";
@@ -31,34 +32,61 @@ function App() {
     selectedWorkType,
     selectedKeyword,
     isShowDepthSearch,
+    depthSearchType,
     setIsShowDepthSearch,
+    setDepthSearchType,
+    setSelectedAreas,
+    setSelectedJobCategories,
   } = useJobFilterStore();
 
-  const jobCategoryColumns = [
-    {
-      title: "업직종",
-      data: job.collection.map((item) => ({
-        id: item,
-        name: item,
-      })),
-    },
-  ];
+  // Configuration for different depth search types
+  const getDepthSearchConfig = () => {
+    switch (depthSearchType) {
+      case 'job':
+        return {
+          title: "업직종 선택",
+          searchPlaceholder: "업직종을 검색하세요.",
+          type: 'job',
+          showGroupOption: false,
+        };
+      case 'area':
+        return {
+          title: "지역 선택",
+          searchPlaceholder: "지역명을 검색하세요.",
+          type: 'area',
+          showGroupOption: false,
+        };
+      default:
+        return null;
+    }
+  };
+
+  const depthSearchConfig = getDepthSearchConfig();
+
+  const handleDepthSearchSelect = (selected) => {
+    if (depthSearchType === 'job') {
+      setSelectedJobCategories(selected);
+    } else if (depthSearchType === 'area') {
+      setSelectedAreas(selected);
+    }
+  };
+
+  const handleDepthSearchClose = () => {
+    setIsShowDepthSearch(false);
+    setDepthSearchType(null);
+  };
 
   return (
     <div className="App">
       <Header />
-      {isShowDepthSearch && (
+      {isShowDepthSearch && depthSearchConfig && (
         <DepthSearch
-          title="업직종 선택"
-          searchPlaceholder="업직종을 검색하세요."
-          columns={jobCategoryColumns}
-          onSelect={(selected) => {
-            console.log("Selected job categories:", selected);
-          }}
-          onClose={() => {
-            setIsShowDepthSearch(false);
-          }}
-          showGroupOption={false}
+          title={depthSearchConfig.title}
+          searchPlaceholder={depthSearchConfig.searchPlaceholder}
+          type={depthSearchConfig.type}
+          onSelect={handleDepthSearchSelect}
+          onClose={handleDepthSearchClose}
+          showGroupOption={depthSearchConfig.showGroupOption}
         />
       )}
       <div className="h-[68px] bg-[#f8f8f8] flex justify-center text-sm items-center text-[#6a6a6a]">

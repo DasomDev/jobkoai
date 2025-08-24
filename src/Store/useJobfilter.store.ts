@@ -15,6 +15,7 @@ interface JobFilterStore {
   excludeNegotiation: boolean; // 협의제외
 
   isShowDepthSearch: boolean; // 깊이 검색 표시 여부
+  depthSearchType: 'job' | 'area' | null; // 깊이 검색 타입
   
   // Search state
   isSearching: boolean; // 검색 중인지 상태
@@ -22,7 +23,9 @@ interface JobFilterStore {
 
   // Actions
   setSelectedAreas: (areas: string[]) => void; // 근무지역
+  removeSelectedArea: (area: string) => void; // 근무지역 제거
   setSelectedJobCategories: (categories: string[]) => void; // 업직종
+  removeSelectedJobCategory: (category: string) => void; // 업직종 제거
   setSelectedWorkPeriods: (periods: string[]) => void; // 근무기간
   setSelectedWorkDays: (days: string[]) => void; // 근무요일
   setSelectedWorkTimes: (times: string[]) => void; // 근무시간
@@ -33,6 +36,7 @@ interface JobFilterStore {
   setExcludeIrrelevantGender: (excludeIrrelevant: boolean) => void; // 관련없음 제외
   setExcludeNegotiation: (excludeNegotiation: boolean) => void; // 협의제외
   setIsShowDepthSearch: (isShowDepthSearch: boolean) => void; // 깊이 검색 표시 여부
+  setDepthSearchType: (type: 'job' | 'area' | null) => void; // 깊이 검색 타입 설정
 
   initFilter: () => void; // 필터 초기화
   
@@ -55,12 +59,17 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
   excludeIrrelevantGender: false,
   excludeNegotiation: false,
   isShowDepthSearch: false,
+  depthSearchType: null,
   isSearching: false,
   searchResults: [],
   
   setSelectedAreas: (areas) => set({ selectedAreas: areas }),
+  removeSelectedArea: (area) =>
+    set({ selectedAreas: get().selectedAreas.filter((a) => a !== area) }),
   setSelectedJobCategories: (categories) =>
     set({ selectedJobCategories: categories }),
+  removeSelectedJobCategory: (category) =>
+    set({ selectedJobCategories: get().selectedJobCategories.filter((c) => c !== category) }),
   setSelectedWorkPeriods: (periods) => set({ selectedWorkPeriods: periods }),
   setSelectedWorkDays: (days) => set({ selectedWorkDays: days }),
   setSelectedWorkTimes: (times) => set({ selectedWorkTimes: times }),
@@ -74,6 +83,7 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
     set({ excludeNegotiation: excludeNegotiation }),
   setIsShowDepthSearch: (isShowDepthSearch) =>
     set({ isShowDepthSearch: isShowDepthSearch }),
+  setDepthSearchType: (type) => set({ depthSearchType: type }),
   setIsSearching: (isSearching) => set({ isSearching }),
   setSearchResults: (results) => set({ searchResults: results }),
   
@@ -135,6 +145,7 @@ const useJobFilterStore = create<JobFilterStore>((set, get) => ({
       excludedKeywords: [],
       excludeIrrelevantGender: false,
       excludeNegotiation: false,
+      depthSearchType: null,
     });
   },
 }));

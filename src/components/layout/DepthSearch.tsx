@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDepthSearch, DepthSearchConfig } from "../../hooks/useDepthSearch";
+import areaData from "../../data/area.json";
+import jobData from "../../data/job.json";
 
 interface DepthItem {
   id: string;
@@ -10,25 +12,27 @@ interface DepthItem {
 interface DepthSearchProps {
   title: string;
   searchPlaceholder: string;
-  columns: {
-    title: string;
-    data: DepthItem[];
-  }[];
   onSelect: (selectedItems: string[]) => void;
   onClose: () => void;
   showGroupOption?: boolean;
   groupOptionLabel?: string;
+  type?: 'area' | 'job' | 'custom';
 }
 
 const DepthSearch: React.FC<DepthSearchProps> = ({
   title,
   searchPlaceholder,
-  columns,
   onSelect,
   onClose,
   showGroupOption = false,
   groupOptionLabel = "유사동묶기?",
+  type = 'custom',
 }) => {
+  const [dynamicColumns, setDynamicColumns] = useState<{
+    title: string;
+    data: DepthItem[];
+  }[]>([]);
+
   // useDepthSearch 훅 사용
   const {
     searchTerm,
@@ -36,25 +40,151 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
     selectedItems,
     groupSimilar,
     setGroupSimilar,
-    filteredColumns,
     handleItemSelect,
     handleConfirm,
     reset
   } = useDepthSearch({
-    type: 'custom',
+    type,
     title,
     searchPlaceholder,
-    columns,
+    columns: [],
     showGroupOption,
     groupOptionLabel
   });
+
+  // Update dynamic columns based on selections
+  useEffect(() => {
+    if (type === 'area') {
+      const newColumns = [
+        {
+          title: '시·도',
+          data: [
+            {
+              id: 'seoul',
+              name: areaData.name
+            }
+          ]
+        },
+        {
+          title: '시·구·군',
+          data: []
+        },
+        {
+          title: '동·읍·면',
+          data: []
+        }
+      ];
+      
+      // Update second column based on first selection
+      if (selectedItems[0]) {
+        newColumns[1] = {
+          title: '시·구·군',
+          data: areaData.collection.map((area, index) => ({
+            id: `area-${index}`,
+            name: area
+          }))
+        };
+      }
+      
+      // Update third column based on second selection
+      if (selectedItems[1]) {
+        // For now, we'll use mock data for the third column
+        // In a real implementation, you'd fetch this data from an API
+        newColumns[2] = {
+          title: '동·읍·면',
+          data: [
+            { id: 'all', name: `${selectedItems[1]} 전체` },
+            { id: 'area1', name: '개포동' },
+            { id: 'area2', name: '개포1동' },
+            { id: 'area3', name: '개포2동' },
+            { id: 'area4', name: '논현동' },
+            { id: 'area5', name: '논현1동' },
+            { id: 'area6', name: '논현2동' },
+          ]
+        };
+      }
+      
+      // Apply search filter if search term exists
+      if (searchTerm) {
+        newColumns.forEach(column => {
+          column.data = column.data.filter(item => 
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        });
+      }
+      
+      setDynamicColumns(newColumns);
+    } else if (type === 'job') {
+      const newColumns = [
+        {
+          title: '업종',
+          data: jobData.categories.map((category) => ({
+            id: category.id,
+            name: category.name
+          }))
+        },
+        {
+          title: '세부업종',
+          data: []
+        },
+        {
+          title: '직종',
+          data: []
+        }
+      ];
+      
+      // Update second column based on first selection
+      if (selectedItems[0]) {
+        const selectedCategory = jobData.categories.find(cat => cat.name === selectedItems[0]);
+        if (selectedCategory) {
+          newColumns[1] = {
+            title: '세부업종',
+            data: selectedCategory.subcategories.map(sub => ({
+              id: sub.id,
+              name: sub.name
+            }))
+          };
+        }
+      }
+      
+      // Update third column based on second selection
+      if (selectedItems[1]) {
+        const selectedCategory = jobData.categories.find(cat => cat.name === selectedItems[0]);
+        if (selectedCategory) {
+          const selectedSubcategory = selectedCategory.subcategories.find(sub => sub.name === selectedItems[1]);
+          if (selectedSubcategory) {
+            newColumns[2] = {
+              title: '직종',
+              data: selectedSubcategory.jobs.map((job, index) => ({
+                id: `job-${index}`,
+                name: job
+              }))
+            };
+          }
+        }
+      }
+      
+      // Apply search filter if search term exists
+      if (searchTerm) {
+        newColumns.forEach(column => {
+          column.data = column.data.filter(item => 
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        });
+      }
+      
+      setDynamicColumns(newColumns);
+    } else {
+      setDynamicColumns([]);
+    }
+  }, [selectedItems, type, searchTerm]);
 
   // 컴포넌트가 언마운트될 때 reset 호출
   React.useEffect(() => {
     return () => {
       reset();
     };
-  }, [reset]);
+  }, []);
 
   return (
     <div className="absolute inset-0 top-0 bottom-0 z-50 justify-center items-center bg-black bg-opacity-50">
@@ -110,7 +240,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
 
         {/* Group Option */}
         {showGroupOption && (
-          <div className="px-4 py-2 border-b border-gray-200">
+          <div className="hidden px-4 py-2 border-b border-gray-200">
             <label className="flex gap-2 items-center text-sm text-gray-700">
               <input
                 type="checkbox"
@@ -138,7 +268,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
 
         {/* Column Headers */}
         <div className="flex border-b border-gray-200">
-          {filteredColumns.map((column, index) => (
+          {dynamicColumns.map((column, index) => (
             <div
               key={index}
               className="flex-1 p-3 text-sm font-medium text-gray-700 bg-gray-50"
@@ -150,7 +280,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
 
         {/* Content Columns */}
         <div className="flex overflow-hidden h-96">
-          {filteredColumns.map((column, columnIndex) => (
+          {dynamicColumns.map((column, columnIndex) => (
             <div
               key={columnIndex}
               className="overflow-y-auto flex-1 border-r border-gray-200 last:border-r-0"
