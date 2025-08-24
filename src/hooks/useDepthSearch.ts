@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import areaData from '../data/area.json';
 import jobData from '../data/job.json';
 
@@ -24,6 +24,15 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [groupSimilar, setGroupSimilar] = useState(false);
+
+  // Set default selections based on type
+  useEffect(() => {
+    if (config.type === 'area' && selectedItems.length === 0) {
+      setSelectedItems([areaData.name]);
+    } else if (config.type === 'job' && selectedItems.length === 0) {
+      setSelectedItems([jobData.categories[0].name]);
+    }
+  }, [config.type, selectedItems.length]);
 
   // Transform data based on type
   const transformedColumns = useMemo(() => {
@@ -97,18 +106,39 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
 
   const handleItemSelect = (item: DepthItem, columnIndex: number) => {
     const newSelectedItems = [...selectedItems];
-    newSelectedItems[columnIndex] = item.name;
     
-    // Clear subsequent columns when a selection is made
-    for (let i = columnIndex + 1; i < newSelectedItems.length; i++) {
-      newSelectedItems[i] = '';
+    if (config.type === 'area') {
+      // For area, only allow selection in the third column (동·읍·면)
+      if (columnIndex === 2) {
+        newSelectedItems[columnIndex] = item.name;
+      } else {
+        // For first and second columns, just update the selection without clearing subsequent columns
+        newSelectedItems[columnIndex] = item.name;
+      }
+    } else {
+      // For other types, use the original logic
+      newSelectedItems[columnIndex] = item.name;
+      
+      // Clear subsequent columns when a selection is made
+      for (let i = columnIndex + 1; i < newSelectedItems.length; i++) {
+        newSelectedItems[i] = '';
+      }
     }
     
     setSelectedItems(newSelectedItems);
   };
 
-  const handleConfirm = (onSelect: (selectedItems: string[]) => void, onClose: () => void) => {
-    onSelect(selectedItems.filter((item) => item));
+  const handleConfirm = (onSelect: (selectedItems: string[]) => void, onClose: () => void, selectedNeighborhoods?: string[]) => {
+    if (config.type === 'area') {
+      // For area, create joined strings for each selected neighborhood
+      const areaStrings = selectedNeighborhoods?.map(neighborhood => 
+        selectedItems.filter((item) => item).slice(0, 2).join(' ') + ' ' + neighborhood
+      ) || [];
+      onSelect(areaStrings);
+    } else {
+      // For other types, use the original logic
+      onSelect(selectedItems.filter((item) => item));
+    }
     onClose();
   };
 
@@ -122,6 +152,7 @@ export const useDepthSearch = (config: DepthSearchConfig) => {
     searchTerm,
     setSearchTerm,
     selectedItems,
+    setSelectedItems,
     groupSimilar,
     setGroupSimilar,
     filteredColumns,

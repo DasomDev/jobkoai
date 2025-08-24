@@ -67,6 +67,7 @@ function App() {
     if (depthSearchType === 'job') {
       setSelectedJobCategories(selected);
     } else if (depthSearchType === 'area') {
+      // For area, selected is already a joined string like "서울 관악구 신림동"
       setSelectedAreas(selected);
     }
   };

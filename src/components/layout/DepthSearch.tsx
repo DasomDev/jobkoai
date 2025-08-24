@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDepthSearch, DepthSearchConfig } from "../../hooks/useDepthSearch";
 import areaData from "../../data/area.json";
 import jobData from "../../data/job.json";
+import Counter from "../common/Counter";
+import useJobFilterStore from "../../Store/useJobfilter.store";
 
 interface DepthItem {
   id: string;
@@ -16,7 +18,7 @@ interface DepthSearchProps {
   onClose: () => void;
   showGroupOption?: boolean;
   groupOptionLabel?: string;
-  type?: 'area' | 'job' | 'custom';
+  type?: "area" | "job" | "custom";
 }
 
 const DepthSearch: React.FC<DepthSearchProps> = ({
@@ -26,153 +28,165 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
   onClose,
   showGroupOption = false,
   groupOptionLabel = "유사동묶기?",
-  type = 'custom',
+  type = "custom",
 }) => {
-  const [dynamicColumns, setDynamicColumns] = useState<{
-    title: string;
-    data: DepthItem[];
-  }[]>([]);
+  const [dynamicColumns, setDynamicColumns] = useState<
+    {
+      title: string;
+      data: DepthItem[];
+    }[]
+  >([]);
+  const [selectedNeighborhoods, setSelectedNeighborhoods] = useState<string[]>([]);
+  
+  const { selectedAreas } = useJobFilterStore();
 
   // useDepthSearch 훅 사용
   const {
     searchTerm,
     setSearchTerm,
     selectedItems,
+    setSelectedItems,
     groupSimilar,
     setGroupSimilar,
     handleItemSelect,
     handleConfirm,
-    reset
+    reset,
   } = useDepthSearch({
     type,
     title,
     searchPlaceholder,
     columns: [],
     showGroupOption,
-    groupOptionLabel
+    groupOptionLabel,
   });
 
   // Update dynamic columns based on selections
   useEffect(() => {
-    if (type === 'area') {
+    if (type === "area") {
       const newColumns = [
         {
-          title: '시·도',
+          title: "시·도",
           data: [
             {
-              id: 'seoul',
-              name: areaData.name
-            }
-          ]
+              id: "seoul",
+              name: areaData.name,
+            },
+          ],
         },
         {
-          title: '시·구·군',
-          data: []
+          title: "시·구·군",
+          data: [],
         },
         {
-          title: '동·읍·면',
-          data: []
-        }
+          title: "동·읍·면",
+          data: [],
+        },
       ];
-      
-      // Update second column based on first selection
+
+      // Update second column based on first selection (including default)
       if (selectedItems[0]) {
         newColumns[1] = {
-          title: '시·구·군',
+          title: "시·구·군",
           data: areaData.collection.map((area, index) => ({
             id: `area-${index}`,
-            name: area
-          }))
+            name: area,
+          })),
         };
       }
-      
+
       // Update third column based on second selection
       if (selectedItems[1]) {
         // For now, we'll use mock data for the third column
         // In a real implementation, you'd fetch this data from an API
         newColumns[2] = {
-          title: '동·읍·면',
+          title: "동·읍·면",
           data: [
-            { id: 'all', name: `${selectedItems[1]} 전체` },
-            { id: 'area1', name: '개포동' },
-            { id: 'area2', name: '개포1동' },
-            { id: 'area3', name: '개포2동' },
-            { id: 'area4', name: '논현동' },
-            { id: 'area5', name: '논현1동' },
-            { id: 'area6', name: '논현2동' },
-          ]
+            { id: "all", name: `${selectedItems[1]} 전체` },
+            { id: "area1", name: "개포동" },
+            { id: "area2", name: "개포1동" },
+            { id: "area3", name: "개포2동" },
+            { id: "area4", name: "논현동" },
+            { id: "area5", name: "논현1동" },
+            { id: "area6", name: "논현2동" },
+          ],
         };
       }
-      
+
       // Apply search filter if search term exists
       if (searchTerm) {
-        newColumns.forEach(column => {
-          column.data = column.data.filter(item => 
+        newColumns.forEach((column) => {
+          column.data = column.data.filter((item) =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
         });
       }
-      
+
       setDynamicColumns(newColumns);
-    } else if (type === 'job') {
+    } else if (type === "job") {
       const newColumns = [
         {
-          title: '업종',
+          title: "업종",
           data: jobData.categories.map((category) => ({
             id: category.id,
-            name: category.name
-          }))
+            name: category.name,
+          })),
         },
         {
-          title: '세부업종',
-          data: []
+          title: "세부업종",
+          data: [],
         },
         {
-          title: '직종',
-          data: []
-        }
+          title: "직종",
+          data: [],
+        },
       ];
-      
-      // Update second column based on first selection
+
+      // Update second column based on first selection (including default)
       if (selectedItems[0]) {
-        const selectedCategory = jobData.categories.find(cat => cat.name === selectedItems[0]);
+        const selectedCategory = jobData.categories.find(
+          (cat) => cat.name === selectedItems[0]
+        );
         if (selectedCategory) {
           newColumns[1] = {
-            title: '세부업종',
-            data: selectedCategory.subcategories.map(sub => ({
+            title: "세부업종",
+            data: selectedCategory.subcategories.map((sub) => ({
               id: sub.id,
-              name: sub.name
-            }))
+              name: sub.name,
+            })),
           };
         }
       }
-      
+
       // Update third column based on second selection
       if (selectedItems[1]) {
-        const selectedCategory = jobData.categories.find(cat => cat.name === selectedItems[0]);
+        const selectedCategory = jobData.categories.find(
+          (cat) => cat.name === selectedItems[0]
+        );
         if (selectedCategory) {
-          const selectedSubcategory = selectedCategory.subcategories.find(sub => sub.name === selectedItems[1]);
+          const selectedSubcategory = selectedCategory.subcategories.find(
+            (sub) => sub.name === selectedItems[1]
+          );
           if (selectedSubcategory) {
             newColumns[2] = {
-              title: '직종',
+              title: "직종",
               data: selectedSubcategory.jobs.map((job, index) => ({
                 id: `job-${index}`,
-                name: job
-              }))
+                name: job,
+              })),
             };
           }
         }
       }
-      
+
       // Apply search filter if search term exists
       if (searchTerm) {
-        newColumns.forEach(column => {
-          column.data = column.data.filter(item => 
+        newColumns.forEach((column) => {
+          column.data = column.data.filter((item) =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
         });
       }
-      
+
       setDynamicColumns(newColumns);
     } else {
       setDynamicColumns([]);
@@ -187,7 +201,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
   }, []);
 
   return (
-    <div className="absolute inset-0 top-0 bottom-0 z-50 justify-center items-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 top-0 bottom-0 z-50 justify-center items-center bg-black bg-opacity-50">
       <div className="flex overflow-hidden flex-col w-full h-full bg-white">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
@@ -279,7 +293,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
         </div>
 
         {/* Content Columns */}
-        <div className="flex overflow-hidden h-96">
+        <div className="flex overflow-hidden h-full">
           {dynamicColumns.map((column, columnIndex) => (
             <div
               key={columnIndex}
@@ -288,10 +302,27 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
               {column.data.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => handleItemSelect(item, columnIndex)}
-                  className={`p-3 text-sm cursor-pointer hover:bg-gray-50 ${
-                    selectedItems[columnIndex] === item.name
-                      ? "bg-orange-100 text-orange-800"
+                  onClick={() => {
+                    if (type === "area" && columnIndex === 2) {
+                      // For area last column, toggle selection like checkboxes
+                      setSelectedNeighborhoods(prev => {
+                        if (prev.includes(item.name)) {
+                          return prev.filter(name => name !== item.name);
+                        } else {
+                          return [...prev, item.name];
+                        }
+                      });
+                    } else {
+                      handleItemSelect(item, columnIndex);
+                    }
+                  }}
+                  className={`p-3 text-sm cursor-pointer ${
+                    type === "area" && columnIndex === 2
+                      ? selectedNeighborhoods.includes(item.name)
+                        ? "bg-[var(--primary-color)] text-white"
+                        : "text-gray-700 hover:bg-gray-50"
+                      : selectedItems[columnIndex] === item.name
+                      ? "bg-[var(--primary-color)] text-white"
                       : "text-gray-700"
                   }`}
                 >
@@ -302,6 +333,38 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
           ))}
         </div>
 
+        {/* Selected Area Display */}
+        {type === "area" && selectedNeighborhoods.length > 0 && (
+          <div className="p-4 bg-gray-50 border-t border-gray-200">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">선택된 지역</span>
+              <Counter count={selectedAreas.length + selectedNeighborhoods.length} maxCount={10} />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {selectedNeighborhoods.map((neighborhood, index) => (
+                <div
+                  key={index}
+                  className="flex gap-1 items-center px-3 py-1 bg-orange-100 rounded-full"
+                >
+                  <span className="text-sm text-orange-700">
+                    {neighborhood}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setSelectedNeighborhoods(prev => 
+                        prev.filter(name => name !== neighborhood)
+                      );
+                    }}
+                    className="text-sm text-orange-500 hover:text-orange-700"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <div className="h-[65px] p-2 flex gap-2 justify-end bg-white mt-auto border-t border-gray-200 font-bold">
           <button
@@ -311,7 +374,7 @@ const DepthSearch: React.FC<DepthSearchProps> = ({
             취소
           </button>
           <button
-            onClick={() => handleConfirm(onSelect, onClose)}
+            onClick={() => handleConfirm(onSelect, onClose, selectedNeighborhoods)}
             className="px-4 w-full h-[48px] text-sm text-white bg-[var(--primary-color)] rounded-lg"
           >
             확인
